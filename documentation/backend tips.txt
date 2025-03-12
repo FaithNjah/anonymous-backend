@@ -1,0 +1,92 @@
+First step to adding  database to your app is to set up the mongo db, compass, then connect it and make sure it is running, here is  a simple example:
+
+const express = require("express");
+step 2:
+const mongoose = require('mongoose');
+step 3:
+const url = "mongodb://localhost:27017/anonymous_app"
+
+const app = express();
+const port = 4555;
+
+
+const route = require('./routes/index')
+
+step 4:
+const connectToDatabase = async () => {
+    const connected = await mongoose.connect(url);
+    if(connected){
+        console.log('successful!')
+    }
+}
+
+
+app.use(express.json())
+app.use(route);
+
+
+app.listen(port, ()=> {
+
+step 5:
+    connectToDatabase().then(()=>{
+        console.log(`connected on ${port}`)
+    })
+})
+
+
+===================================
+
+Seperating it into another file
+the index.js will look like this:
+const express = require("express");
+const {connectToDatabase} = require('./containers/database')
+
+
+const app = express();
+const port = 4555;
+
+
+const route = require('./routes/index')
+
+
+
+app.use(express.json())
+app.use(route);
+
+
+app.listen(port, ()=> {
+    connectToDatabase().then(()=>{
+        console.log(`connected on ${port}`)
+    })
+})
+
+
+The database.js will look like this:
+
+
+const mongoose = require('mongoose');
+const url = "mongodb://localhost:27017/anonymous_app";
+
+const connectToDatabase = async () => {
+    const connected = await mongoose.connect(url);
+    if(connected){
+        console.log('successful!')
+    }
+}
+
+module.exports = {connectToDatabase}
+
+
+
+================================
+Next step is to create the model for authentication
+
+
+
+
+-added vercel.json to push to vercel
+added process.env.port||3000
+-added jwt to env on vercel environment variable on the vercel platform. settings-env var - 
+-added .env file
+-added cors
+-Lastly connected to mogodb external src before hosting on vercel
