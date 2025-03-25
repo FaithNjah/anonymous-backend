@@ -4,7 +4,7 @@ const User = require("../models/user.model");
 const Message = require("../models/message.model");
 
 router.get("/", (_, res) => {
-    res.send("working fine");
+    res.status(200).send("working fine");
 });
 
 // Get all user messages using username
@@ -65,8 +65,6 @@ router.post("/sign-in", async (req, res) => {
     try {
         const user = await User.findOne({ username });
         if (!user) {
-            // We can use the throw new error to see the error message in the console or use the return. res to see the error message directly at the postman testing phase
-            //   throw new Error('wrong username')
             return res.status(400).json({ message: "User not found" });
         }
 
@@ -75,11 +73,16 @@ router.post("/sign-in", async (req, res) => {
         }
 
         // User authenticated successfully
-        const messages = await Message.find({user:user})
+        const messages = await Message.find({ user: user });
         var token = user.generateAuthToken();
         console.log(token);
         console.log("Logged in successful");
-        res.status(200).json({ message: "login successful", token, user, messages });
+        res.status(200).json({
+            message: "login successful",
+            token,
+            user,
+            messages,
+        });
     } catch (err) {
         console.log("error during login", err.message);
         res.status(401).json({ message: "invalid credentials" });

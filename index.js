@@ -1,22 +1,18 @@
 require("dotenv").config();
 
 const express = require("express");
-const {connectToDatabase} = require('./containers/database')
-const cors = require('cors');
-
+const { connectToDatabase } = require("./containers/database");
+const cors = require("cors");
 
 const app = express();
 const port = process.env.PORT || 4555;
 
-app.use(cors({exposedHeader: 'x-auth-token'}))
+app.use(cors({ exposedHeader: "x-auth-token" }));
 
+const route = require("./routes/index");
 
-const route = require('./routes/index');
-const { default: mongoose } = require("mongoose");
-
-app.use(express.json())
-app.use('/', route);
-
+app.use(express.json());
+app.use("/", route);
 
 const startServer = async () => {
     try {
@@ -35,4 +31,4 @@ const startServer = async () => {
     }
 };
 
-startServer()
+startServer();
